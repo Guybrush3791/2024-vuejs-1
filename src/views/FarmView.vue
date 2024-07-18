@@ -5,13 +5,8 @@
     <br />
     <button @click="toggleNewFarmShow">ADD NEW FARM</button>
     <ul>
-      <li v-for="(farm, ind) in farms" :key="farm.id">
-        [{{ ind + 1 }}] {{ farm.name }}: {{ farm.city }}
-      </li>
+      <li v-for="farm in farms" :key="farm.id">[{{ farm.id }}] {{ farm.name }}: {{ farm.city }}</li>
     </ul>
-    <p v-if="saveResVis">
-      {{ saveRes }}
-    </p>
   </div>
   <div v-else>
     <h1>New Farm:</h1>
@@ -34,8 +29,6 @@ import axios from 'axios'
 
 const farms = ref([])
 
-const saveResVis = ref(false)
-const saveRes = ref('')
 const newFarmShow = ref(false)
 const newFarmData = ref({
   name: '',
@@ -76,9 +69,6 @@ const saveNewFarm = () => {
       city: ''
     }
 
-    saveRes.value = 'update'
-    saveResVis.value = true
-
     toggleNewFarmShow()
   })
 }
@@ -87,18 +77,3 @@ onMounted(() => {
   updateData()
 })
 </script>
-
-<!-- 
-
-    TODO:
-    
-    Completare il componente facendo in modo che alla
-    creazione del componente vengano scaricati i dati di 
-    tutte le fattorie (farm).
-
-    Aggiungere inoltre un tasto che permetta di caricare
-    dei dati di test per contadini e fattorie (/test/add),
-    facendo in modo che i dati visibili in pagina vengano
-    aggiornati in maniera automatica e nascosta all'utente.
-
--->
