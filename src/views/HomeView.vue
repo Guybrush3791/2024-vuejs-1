@@ -11,6 +11,13 @@
         <br />
         {{ farmer.farm.name }} ({{ farmer.farm.city }})
         <br />
+        Specializations:
+        <ul>
+          <li v-for="spec in farmer.specializations" :key="spec.id">
+            {{ spec.name }}
+          </li>
+        </ul>
+        <br />
         <button @click="editFarmer(farmer.id)">EDIT</button>
         <button @click="deleteFarmer(farmer.id)">DELETE</button>
       </li>
@@ -38,6 +45,17 @@
       </option>
     </select>
     <br />
+    <label>Specializations:</label>
+    <br />
+    <div v-for="spec in specs" :key="spec.id">
+      <input
+        type="checkbox"
+        :id="'spec-' + spec.id"
+        :value="spec.id"
+        v-model="newFarmerData.specs"
+      />
+      <label :for="'spec-' + spec.id">{{ spec.name }}</label>
+    </div>
     <button @click="toggleNewFarmerShow">CANCEL</button>
     <button @click="saveNewFarmer">SAVE</button>
   </div>
@@ -79,12 +97,14 @@ const updateFarmerShow = ref(false)
 
 const farms = ref([])
 const farmers = ref([])
+const specs = ref([])
 
 const newFarmerData = ref({
   name: '',
   surname: '',
   age: 0,
-  farmId: 0
+  farmId: 0,
+  specs: []
 })
 const updateFarmerData = ref({})
 
@@ -97,6 +117,7 @@ const updateData = () => {
     .get('http://localhost:8080/api/v1/farmer')
     .then((res) => {
       farmers.value = res.data
+      // console.log(JSON.stringify(farmers.value, null, 2))
     })
     .catch(() => {
       console.log('error!!!!!!!!!')
@@ -104,6 +125,10 @@ const updateData = () => {
 
   axios.get('http://localhost:8080/api/v1/farm').then((res) => {
     farms.value = res.data
+  })
+
+  axios.get('http://localhost:8080/api/v1/specs').then((res) => {
+    specs.value = res.data
   })
 }
 
